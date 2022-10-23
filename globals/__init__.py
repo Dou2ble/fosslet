@@ -12,6 +12,6 @@ YES_NO = [
 ]
 
 if os_name == "nt":
-    CLEAR = "clr"
+    CLEAR = "cls"
 else:
     CLEAR = "clear"
