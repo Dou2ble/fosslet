@@ -1,3 +1,4 @@
 pygame
 termcolor
 deep_translator
+gTTS

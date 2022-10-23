@@ -1,9 +1,12 @@
 import os
 import sys
+from xml.dom import WrongDocumentErr
 
 from deep_translator import GoogleTranslator
 from pygame import mixer
 from termcolor import colored
+import pyttsx3
+from gtts import gTTS
 
 import utils
 from config import *
@@ -66,18 +69,77 @@ def take_quiz(type: str, words: list):
     global failed
     failed = []
 
-    if type == "listen":
+    if type.startswith("listen"):
+        mixer.init()
         for w in words:
-            print(w)
+            if type == "listen":
+                audio = gTTS(text=w, lang=TTS_LANGUAGE, slow=False)
+            elif type == "listen slow":
+                audio = gTTS(text=w, lang=TTS_LANGUAGE, slow=True)
+
+            audio.save("w.mp3")
+            mixer.music.load("w.mp3")
+            mixer.music.set_volume(VOLUME)
+            mixer.music.play()
+
+
+
+            input_w = input(PROMPT)
+            if input_w != w:
+                failed.append(w)
+                print(colored("WRONG!", "red"))
+
+
+                list_w = list(w)
+                compare_print = ""
+                for i, char in enumerate(list(input_w)):
+                    try:
+                        if char == list_w[i]:
+                            compare_print += colored(char, "green")
+                        else:
+                            compare_print += colored(char, "red")
+                    except:
+                        pass
+                print("You Wrote:")
+                print(compare_print)
+                
+                print("Correct Word:")
+                print(colored(w, "green"))
+
+                input("Press enter to continue...")
+
+
+        mixer.quit()
+            
     
     if type == "write":
         for w in words:
             os.system(CLEAR)
             trans_w = translator.translate(w)
             print(trans_w)
-            if input(PROMPT) != w:
+            input_w = input(PROMPT)
+            if input_w != w:
                 failed.append(w)
                 print(colored("WRONG!", "red"))
+
+                
+
+                list_w = list(w)
+                compare_print = ""
+                for i, char in enumerate(list(input_w)):
+                    try:
+                        if char == list_w[i]:
+                            compare_print += colored(char, "green")
+                        else:
+                            compare_print += colored(char, "red")
+                    except:
+                        pass
+                print("You Wrote:")
+                print(compare_print)
+                
+                print("Correct Word:")
+                print(colored(w, "green"))
+
                 input("Press enter to continue...")
             
         
