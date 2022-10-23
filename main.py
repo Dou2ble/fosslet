@@ -5,7 +5,6 @@ from xml.dom import WrongDocumentErr
 from deep_translator import GoogleTranslator
 from pygame import mixer
 from termcolor import colored
-import pyttsx3
 from gtts import gTTS
 
 import utils
